@@ -1,6 +1,7 @@
 # Exploratory data analysis on nyc survival data and nyc property sales 
 
-#Project Overview
+###Project Overview
+
 This project demonstrates exploratory data analysis (EDA) using Python on two real world datasets:
 1. **Survival Data** - focusing on data cleaning, transformation, and preliminary insights.
 2. **NYC Property Sales Case Study** - analyzing real estate trends and drawing data-driven conclusions.
@@ -40,19 +41,91 @@ Practiced analytical thinking using survival data.
 `matplotlib`
 `seaborn`
 
-## Sample Code Snippets
+### Part A: NYC Property Sales Analysis 
 
-### 1. Handling Missing Values
+``import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns``
 
-data.isnull().sum()
-data.fillna(method='ffill', inplace=True)
+# Load data
+``data = pd.read_csv('sales.csv')``
 
-### 2. Grouped Analysis
-df.groupby('borough')['sale_price'].mean().sort_values(ascending=False)
+# Clean column names
+``data.columns = data.columns.str.strip().str.upper().str.replace(" ", "_")``
 
-### 3. Visualizing Distributions
-sns.histplot(df['sale_price'], bins=50, kde=True)
+# Convert SALE_PRICE to numeric
+``data['SALE_PRICE'] = pd.to_numeric(data['SALE_PRICE'], errors='coerce')``
+
+# Filter out invalid sale prices (e.g., $0 or too low)
+``data = data[data['SALE_PRICE'] > 1000]``
+
+# Handle missing values
+``print("Missing values:\n", data.isnull().sum())
+data.fillna(method='ffill', inplace=True)``
+
+# Grouped analysis: Average sale price by Borough
+``borough_avg_price = data.groupby('BOROUGH')['SALE_PRICE'].mean().sort_values(ascending=False)
+print("\nAverage Sale Price by Borough:\n", borough_avg_price)``
+
+# Pivot Table: Building class category summary
+``pivot_table = data.groupby('BUILDING_CLASS_CATEGORY').agg({
+    'SALE_PRICE': ['count', 'median']
+}).reset_index()
+pivot_table.columns = ['BUILDING CLASS CATEGORY', 'Total Properties Sold', 'Median Sale Price']
+print("\nSummary Table:\n", pivot_table)``
+
+# Visualize sale price distribution
+``plt.figure(figsize=(10, 6))
+sns.histplot(data['SALE_PRICE'], bins=50, kde=True)
 plt.title("Distribution of NYC Property Sale Prices")
+plt.xlabel("Sale Price (USD)")
+plt.ylabel("Number of Properties")
+plt.tight_layout()
+plt.show()``
+
+### Part B: Survival Analysis 
+
+``import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns``
+
+# Load dataset
+``df = pd.read_csv('Sales.csv')``
+
+# Clean column names
+``df.columns = df.columns.str.strip().str.upper().str.replace(" ", "_")``
+
+# Convert SALE_PRICE to numeric
+``df['SALE_PRICE'] = pd.to_numeric(df['SALE_PRICE'], errors='coerce')``
+
+# Filter out invalid prices (e.g., 0 or less than 1000)
+``df = df[df['SALE_PRICE'] > 1000]``
+
+# Handle missing values
+``print("Missing values:\n", df.isnull().sum())
+df.fillna(method='ffill', inplace=True)``
+
+# Grouped analysis: Borough-wise average sale price
+``borough_avg = df.groupby('BOROUGH')['SALE_PRICE'].mean().sort_values(ascending=False)
+print("\nAverage Sale Price by Borough:\n", borough_avg)``
+
+# Pivot Table: Building class category summary
+``pivot = df.groupby('BUILDING_CLASS_CATEGORY').agg({
+    'SALE_PRICE': ['count', 'median']
+}).reset_index()
+pivot.columns = ['BUILDING CLASS CATEGORY', 'Total Properties Sold', 'Median Sale Price']
+print("\nSales Summary by Building Class Category:\n", pivot)``
+
+# Visualize distribution of sale prices
+``plt.figure(figsize=(10, 6))
+sns.histplot(df['SALE_PRICE'], bins=50, kde=True)
+plt.title("Distribution of NYC Property Sale Prices")
+plt.xlabel("Sale Price (USD)")
+plt.ylabel("Number of Properties")
+plt.tight_layout()
+plt.show()``
+
+
 
 ### Key Insights
 
