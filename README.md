@@ -7,5 +7,5 @@ This project demonstrates exploratory data analysis (EDA) using Python on two re
 
 It showcases practical skills in data handling, visualization, and interpretation using Python libraries like `pandas`, `matplotlib`, and `seaborn`.
 
-![Project Banner]()
+![Project Banner](https://github.com/arkatava-saha/eda-nyc-property-survival-data/blob/main/NYC%20Property.png)
 
